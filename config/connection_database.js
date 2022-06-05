@@ -1,4 +1,4 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -8,13 +8,9 @@ const dbDatabase = process.env.DB_NAME;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
-const client = new Client({
+exports.pool = new Pool({
     connectionString: `postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`,
     // ssl: {
     //   rejectUnauthorized: false
     // }
 });
-
-client.connect();
-
-module.exports = client;
