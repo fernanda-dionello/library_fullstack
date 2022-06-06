@@ -18,3 +18,29 @@ exports.getAuthorById = async(id) => {
         throw err;
     };
 }
+
+exports.postAuthors = async(authors) => {
+    const bd = await pool.connect();
+    try{
+        await bd.query('BEGIN');
+        const sql = "INSERT INTO authors (name, country) VALUES ($1, $2) RETURNING *";
+
+        for(const author of authors){
+            const values = [author.name.toUpperCase(), author.country];
+            await bd.query(sql, values);
+        }
+        await bd.query('COMMIT');
+        console.log('COMMIT');
+    }
+    catch(err){
+        await bd.query('ROLLBACK');
+        console.log('ROLLBACK');
+        if(err.code == 23505){
+            err = {message:"Cannot create duplicate author, it already exists in authors table.", status: 403};
+        }
+        throw err;
+    }
+    finally{
+        bd.release();
+    }
+}
