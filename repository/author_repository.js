@@ -42,5 +42,32 @@ exports.postAuthors = async(authors) => {
     }
     finally{
         bd.release();
-    }
+    };
 }
+
+exports.deleteAuthor = async(id) => {
+    const bd = await pool.connect();
+    const values = [id];
+    try{
+        await bd.query('BEGIN');
+        const sql = 'DELETE FROM authors WHERE id=$1 RETURNING *';
+
+        await bd.query(sql, values);
+
+        await bd.query('COMMIT');
+        console.log('COMMIT');
+
+    } catch(err) {
+        await bd.query('ROLLBACK');
+        console.log('ROLLBACK');
+        if(err.code = 23503){
+            err = {message:"Cannot delete author, because author has a vinculation to books table.", status: 403};
+        };
+        throw err;
+    }
+    finally{
+        bd.release();
+    };
+}
+
+

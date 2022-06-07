@@ -31,3 +31,13 @@ exports.createAuthors = async (req, resp) => {
     }   
 }
 
+exports.removeAuthor = async (req, resp) => {
+    const id = req.params.id; 
+    try{
+        await author_business.removeAuthor(id);
+        resp.json("Author deleted successfully");
+    } catch (e) {
+        returnError(e, resp);
+    };
+}
+
