@@ -45,6 +45,31 @@ exports.postAuthors = async(authors) => {
     };
 }
 
+exports.updateAuthor = async(author, id) => {
+    const bd = await pool.connect();
+    const values = [author.name.toUpperCase(), author.country, id];
+    try{
+        await bd.query('BEGIN');
+        const sql = "UPDATE authors SET name=$1, country=$2 WHERE id=$3 RETURNING *";
+        await bd.query(sql, values);
+
+        await bd.query('COMMIT');
+        console.log('COMMIT');
+    }
+    catch(err){
+        await bd.query('ROLLBACK');
+        console.log('ROLLBACK');
+        if(err.code = 23505){
+            err = {message:"Cannot update to an author that already exists in authors table.", status: 403};
+        }
+        throw err;
+    }
+    finally{
+        bd.release();
+    }
+
+}
+
 exports.deleteAuthor = async(id) => {
     const bd = await pool.connect();
     const values = [id];

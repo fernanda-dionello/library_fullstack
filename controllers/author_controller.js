@@ -31,6 +31,19 @@ exports.createAuthors = async (req, resp) => {
     }   
 }
 
+exports.updateAuthor = async (req, resp) => {
+    const id = req.params.id; 
+    const author = req.body;
+    try{
+        await author_business.updateAuthor(id, author);
+        resp.json("Author updated successfully");
+    } catch (e) {
+        returnError(e, resp);
+    };
+}
+
+
+
 exports.removeAuthor = async (req, resp) => {
     const id = req.params.id; 
     try{
