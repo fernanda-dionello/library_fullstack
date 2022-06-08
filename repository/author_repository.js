@@ -4,8 +4,12 @@ exports.getAuthors = async() => {
     const bd = await pool.connect();
     try{
         return await bd.query('SELECT * FROM authors ORDER BY id');
-    } catch(err) {
+    }
+    catch(err) {
         throw err;
+    }
+    finally{
+        bd.release();
     };
 };
 
@@ -14,8 +18,12 @@ exports.getAuthorById = async(id) => {
     const values = [id];
     try{
         return await bd.query('SELECT * FROM authors WHERE id=$1', values);
-    } catch(err) {
+    }
+    catch(err) {
         throw err;
+    }
+    finally{
+        bd.release();
     };
 }
 
