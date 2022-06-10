@@ -6,7 +6,11 @@ exports.getCountryIdByName = async countryName => {
     try{
         const result = await bd.query('SELECT id FROM countries WHERE country = $1', values);
         return result;
-    } catch(err) {
+    }
+    catch(err) {
         throw err;
+    }
+    finally{
+        bd.release();
     };   
 }

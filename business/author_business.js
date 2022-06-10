@@ -39,7 +39,7 @@ exports.updateAuthor = async (id, author) => {
     try{
         await author_validators.validateAuthorUpdate(author, id);
         await mapCountryNameToCountryId([author]);
-        const mappedAuthor = await mapAuthorFieldsToUpdate(author);
+        const mappedAuthor = await mapAuthorFieldsToUpdate(author, id);
         return await author_repository.updateAuthor(mappedAuthor, id);
     } catch(err) {
         throw err;
@@ -50,6 +50,17 @@ exports.removeAuthor = async (id) => {
     try{
         await author_validators.validateAuthorId(id);
         return await author_repository.deleteAuthor(id);
+    } catch (err) {
+        throw err;
+    };
+}
+
+exports.getAuthorIdByName = async (authorName) => {
+    try{
+        const author = authorName.toUpperCase();
+        const authorId = await author_repository.getAuthorIdByName(author);
+        await author_validators.validateAuthorByNameFounded(authorId, authorName);
+        return authorId.rows[0].id;
     } catch (err) {
         throw err;
     };

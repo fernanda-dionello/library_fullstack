@@ -90,7 +90,8 @@ exports.deleteAuthor = async(id) => {
         await bd.query('COMMIT');
         console.log('COMMIT');
 
-    } catch(err) {
+    }
+    catch(err) {
         await bd.query('ROLLBACK');
         console.log('ROLLBACK');
         if(err.code = 23503){
@@ -103,4 +104,17 @@ exports.deleteAuthor = async(id) => {
     };
 }
 
-
+exports.getAuthorIdByName = async authorName => {
+    const bd = await pool.connect();
+    const values = [authorName];
+    try{
+        const result = await bd.query('SELECT id FROM authors WHERE name = $1', values);
+        return result;
+    }
+    catch(err) {
+        throw err;
+    }
+    finally{
+        bd.release();
+    };   
+}

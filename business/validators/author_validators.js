@@ -16,6 +16,13 @@ exports.validateAuthorFounded = (authors, id) => {
     }
 }
 
+exports.validateAuthorByNameFounded = (authors, name) => {
+    if(authors.rowCount == 0){
+        err = {message:`No author with name ${name} found.`, status: 404};
+        throw err;
+    }
+}
+
 exports.validateAuthorsCreation = (authors) => {
     for(const author of authors) {
         validateAuthor(author);
