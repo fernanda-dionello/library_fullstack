@@ -1,4 +1,5 @@
 const book_repository = require('../../repository/book_repository');
+const isEmpty = require('lodash/isEmpty');
 
 let err = {message:"", status:400};
 
@@ -50,7 +51,7 @@ exports.validateBookId = async (id) => {
 
 exports.validateBookUpdate = async (book, id) => {
     await this.validateBookId(id);
-    if (!book) {
+    if (isEmpty(book)) {
         err.message = "Book data is missing.";
         throw err;
     }

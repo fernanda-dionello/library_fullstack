@@ -1,4 +1,5 @@
 const author_repository = require('../../repository/author_repository');
+const isEmpty = require('lodash/isEmpty');
 
 let err = {message:"", status:400};
 
@@ -43,7 +44,7 @@ exports.validateAuthorId = async (id) => {
 
 exports.validateAuthorUpdate = async (author, id) => {
     await this.validateAuthorId(id);
-    if (!author) {
+    if (isEmpty(author)) {
         err.message = "Author data is missing.";
         throw err;
     }

@@ -1,4 +1,5 @@
 const client_repository = require('../../repository/client_repository');
+const isEmpty = require('lodash/isEmpty');
 let err = {message:"", status:400};
 
 exports.validateClientsFounded = (clients) => {
@@ -27,7 +28,7 @@ exports.validateClientCreation = (clients) => {
 
 exports.validateClientUpdate = async (client, registration_number) => {
     await this.validateClientRegistrationNumber(registration_number);
-    if (!client) {
+    if (isEmpty(client)) {
         err.message = "Client data is missing.";
         throw err;
     }
