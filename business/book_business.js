@@ -64,7 +64,6 @@ exports.updateBook = async (id, book) => {
         const mappedBook = await mapBookFieldsToUpdate(book, id);
         await mapAuthorNameToAuthorId([mappedBook]);
         await mapPublishingCompanyNameToPublishingCompanyId([mappedBook]);
-        console.log('book', mappedBook)
         return await book_repository.updateBook(mappedBook, id);
     } catch(err) {
         throw err;

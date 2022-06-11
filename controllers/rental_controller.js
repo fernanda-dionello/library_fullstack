@@ -20,3 +20,14 @@ exports.borrow = async (req, resp) => {
         returnError(e, resp);       
     }   
 }
+
+exports.return = async (req, resp) => {
+    const rents = req.body;
+    try{ 
+        const msg = await rental_business.return(rents);
+        resp.status(201).json(msg);
+    }
+    catch(e) {
+        returnError(e, resp);       
+    }   
+}

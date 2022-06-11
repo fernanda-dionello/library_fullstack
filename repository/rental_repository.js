@@ -63,3 +63,37 @@ exports.borrow = async(rents) => {
         bd.release();
     };
 }
+
+exports.getRental = async(book_id, client_registration_number) => {
+    const bd = await pool.connect();
+    const values = [book_id, client_registration_number];
+    try{
+        return await bd.query('SELECT id, end_date FROM rents WHERE book_id = $1 AND client_registration_number = $2 AND active = true', values);
+    }
+    catch(err) {
+        throw err;
+    }
+    finally{
+        bd.release();
+    };
+}
+
+exports.return = async(rental_id) => {
+    const bd = await pool.connect();
+    const values = [rental_id];
+    try{
+        await bd.query('BEGIN');
+        const sql = 'UPDATE rents SET active = false WHERE id = $1';
+        await bd.query(sql, values);
+        await bd.query('COMMIT');
+        console.log('COMMIT');
+    }
+    catch(err){
+        await bd.query('ROLLBACK');
+        console.log('ROLLBACK');
+        throw err;
+    }
+    finally{
+        bd.release();
+    };
+}

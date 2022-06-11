@@ -21,13 +21,12 @@ exports.validateRentsFounded = (rents) => {
 //verificar se o livro já está emprestado para alguém
 //verificar se o cliente tem mais de 3 livros locados
 
-validateRentalBody = (rents) => {
-    console.log()
+validateRentalBody = (rents, borrow) => {
     if (rents.length == 0) {
         err.message = "Rental data is missing.";
         throw err;
     }
-    if (rents.length > 3) {
+    if (borrow && rents.length > 3) {
         err.message = "You cannot rent more than 3 books at time.";
         throw err;
     } 
@@ -67,6 +66,12 @@ validateRentalClientRegistrationNumber = async(rents) => {
     await client_validators.validateClientRegistrationNumber(rents[0].client_registration_number);
 }
 
+validateReturnedClientsRegistrationNumber = async(rents) => {
+    for(const rental of rents) {
+        await client_validators.validateClientRegistrationNumber(rental.client_registration_number);
+    };
+}
+
 validateIfBooksAreDifferent = (rents) => {
     const uniqueBooks = new Set(rents.map(rent => rent.book_id));
     if (uniqueBooks.size !== rents.length) {
@@ -75,8 +80,8 @@ validateIfBooksAreDifferent = (rents) => {
     }
 }
 
-validateRentalBookId = async(rents) => {
-    validateIfBooksAreDifferent(rents);
+validateRentalBookId = async(rents, borrow) => {
+    borrow && validateIfBooksAreDifferent(rents);
     for(const rental of rents) {
         await book_validators.validateBookId(rental.book_id)
     };
@@ -101,10 +106,27 @@ validateRentBooksByClient = async(rents) => {
     };
 }
 
+validateRentalExistency = async(rents) => {
+    for(const rental of rents) {
+        const rentalExistency = await rental_repository.getRental(rental.book_id, rental.client_registration_number);
+        if (rentalExistency.rowCount == 0) {
+            err = {message:`Rental with client id ${rental.client_registration_number} and book id ${rental.book_id} not found.`, status:403};
+            throw err;
+        };
+    };
+}
+
 exports.validateBorrow = async (rents) => {
-    validateRentalBody(rents);
+    validateRentalBody(rents, true);
     await validateRentalClientRegistrationNumber(rents);
-    await validateRentalBookId(rents);
+    await validateRentalBookId(rents, true);
     await validateBookAvailability(rents);
     await validateRentBooksByClient(rents);
+}
+
+exports.validateReturn = async (rents) => {
+    validateRentalBody(rents, false);
+    await validateReturnedClientsRegistrationNumber(rents);
+    await validateRentalBookId(rents, false);
+    await validateRentalExistency(rents);
 }
