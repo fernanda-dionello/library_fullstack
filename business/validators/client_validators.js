@@ -16,6 +16,10 @@ exports.validateClientFounded = (clients, registration_number) => {
 }
 
 exports.validateClientCreation = (clients) => {
+    if (clients.length == 0) {
+        err.message = "Client data is missing.";
+        throw err;
+    }
     for(const client of clients) {
         validateClient(client);
     }

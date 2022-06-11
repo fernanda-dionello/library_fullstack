@@ -24,6 +24,10 @@ exports.validateAuthorByNameFounded = (authors, name) => {
 }
 
 exports.validateAuthorsCreation = (authors) => {
+    if (authors.length == 0) {
+        err.message = "Author data is missing.";
+        throw err;
+    }
     for(const author of authors) {
         validateAuthor(author);
     }

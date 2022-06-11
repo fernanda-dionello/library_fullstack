@@ -31,6 +31,10 @@ exports.validateBookByAuthorFounded = (books, id) => {
 }
 
 exports.validateBooksCreation = (books) => {
+    if (books.length == 0) {
+        err.message = "Book data is missing.";
+        throw err;
+    }
     for(const book of books) {
         validateBook(book);
     }
