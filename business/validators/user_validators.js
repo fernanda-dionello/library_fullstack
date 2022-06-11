@@ -21,7 +21,6 @@ validateFields = (user) => {
     }
 }
 
-
 exports.validateUser = (userFounded, userBody) => {
     if(userFounded.rowCount == 0) {
         err = {message:`No user with username ${userBody.username} found.`, status: 404};
@@ -33,6 +32,13 @@ exports.validateUser = (userFounded, userBody) => {
 
     if(userFounded.rows[0].password !== encryptPassword.digest('hex')){
         err = {message:"Password incorrect.", status: 401};
+        throw err;
+    }
+}
+
+exports.validateToken = (token) => {
+    if (!token) {
+        err.message = "Access token is missing.";
         throw err;
     }
 }

@@ -17,19 +17,12 @@ exports.userValidation = async (req, resp) => {
     }
 };
 
-// exports.tokenValidation = (req, res, next) => {
-//     const token = req.get("x-auth-token");
-//     if(token){
-//         jwt.verify(token, secret, (err, payload) => {
-//             if(err){
-//                 res.status(403).json({msg:"Invalid Token"});        
-//             }
-//             else{
-//                 console.log("User id: "+ payload.id);
-//                 next();
-//             };
-//         });
-//     } else {
-//         res.status(400).json({msg:"Access token is missing"});
-//     };
-// };
+exports.tokenValidation = (req, resp, next) => {
+    const token = req.get("x-auth-token");
+    try{ 
+        user_business.tokenValidation(token, next);
+    }
+    catch(e) {
+        returnError(e, resp);       
+    }
+};

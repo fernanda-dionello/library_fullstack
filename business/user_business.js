@@ -21,3 +21,21 @@ exports.userValidation = async (user) => {
         throw err;
     };
 };
+
+exports.tokenValidation = (token, next) => {
+    try {
+        user_validators.validateToken(token);
+        jwt.verify(token, secret, (error, payload) => {
+            if(error){
+                err = {message:"Invalid Token", status: 403};
+                throw err;       
+            }
+            else{
+                // console.log("User id: "+ payload.id);
+                next();
+            };
+        });
+    } catch (err) {
+        throw err;
+    };   
+}

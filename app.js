@@ -8,12 +8,13 @@ const authorRoutes = require('./routes/author_routes');
 const clientRoutes = require('./routes/client_routes');
 const bookRoutes = require('./routes/book_routes');
 const rentalRoutes = require('./routes/rental_routes');
+const user_controller = require('./controllers/user_controller');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use('/login', loginRoute);
-// app.use(userController.tokenValidation);
+app.use(user_controller.tokenValidation);
 app.use('/author', authorRoutes);
 app.use('/client', clientRoutes);
 app.use('/book', bookRoutes);
