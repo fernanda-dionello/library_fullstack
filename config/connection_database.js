@@ -10,7 +10,7 @@ const dbPassword = process.env.DB_PASSWORD;
 
 exports.pool = new Pool({
     connectionString: `postgres://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`,
-    // ssl: {
-    //   rejectUnauthorized: false
-    // }
+    ssl: {
+      rejectUnauthorized: false
+    }
 });
