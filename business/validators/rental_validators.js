@@ -11,16 +11,6 @@ exports.validateRentsFounded = (rents) => {
     }
 }
 
-//validar se tem body (se tem rent)
-//validar se tem campo client_registration_number
-//validar se tem campo book_id
-//verificar se todos os rents são do mesmo usuário
-//verificar se o cliente existe
-//verificar se todos os livros são diferentes
-//verificar se o livro existe
-//verificar se o livro já está emprestado para alguém
-//verificar se o cliente tem mais de 3 livros locados
-
 validateRentalBody = (rents, borrow) => {
     if (rents.length == 0) {
         err.message = "Rental data is missing.";
