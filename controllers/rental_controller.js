@@ -9,3 +9,14 @@ exports.listRents = async (req, resp) => {
         returnError(e, resp);
     };
 };
+
+exports.borrow = async (req, resp) => {
+    const rents = req.body;
+    try{ 
+        await rental_business.borrow(rents);
+        resp.status(201).json("Book(s) rent with success!");
+    }
+    catch(e) {
+        returnError(e, resp);       
+    }   
+}

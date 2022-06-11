@@ -11,3 +11,13 @@ exports.listAllRents = async () => {
         throw err;
     };
 };
+
+
+exports.borrow = async (rents) => {
+    try{
+        await rental_validators.validateBorrow(rents);
+        return await rental_repository.borrow(rents);
+    } catch (err) {
+        throw err;
+    }; 
+}
