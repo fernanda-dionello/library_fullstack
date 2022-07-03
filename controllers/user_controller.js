@@ -18,7 +18,7 @@ exports.userValidation = async (req, resp) => {
 };
 
 exports.tokenValidation = (req, resp, next) => {
-    const token = req.get("x-auth-token");
+    const token = req.get("x-session-token");
     try{ 
         user_business.tokenValidation(token, next);
     }
